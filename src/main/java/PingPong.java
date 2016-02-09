@@ -8,8 +8,20 @@ import java.util.ArrayList;
 public class PingPong {
   public static void main(String[] args) {
     staticFileLocation("/public");
+
     get("/", (request, response) -> {
-      return new ModelAndView(new HashMap(), "templates/pingpong.vtl");
+      HashMap model = new HashMap();
+      return new ModelAndView(model, "templates/pingpong.vtl");
+    }, new VelocityTemplateEngine());
+
+    get("/results", (request, response) -> {
+      HashMap model = new HashMap();
+      String userNumber = request.queryParams("user-number");
+      Integer userInt = Integer.parseInt(userNumber);
+      ArrayList<Object> results = makeArr(userInt);
+      
+      model.put("userNumber", results);
+      return new ModelAndView(model, "templates/pingpong.vtl");
     }, new VelocityTemplateEngine());
   }
 
